@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <!-- Default Sizes -->
+    <dimen name="size_10">2dp</dimen>
+    <dimen name="size_25">5dp</dimen>
+    <dimen name="size_30">6dp</dimen>
+    <dimen name="size_50">10dp</dimen>
+    <dimen name="size_75">15dp</dimen>
+    <dimen name="size_100">20dp</dimen>
+    <dimen name="size_150">30dp</dimen>
+    <dimen name="size_175">35dp</dimen>
+    <dimen name="size_200">40dp</dimen>
+    <dimen name="size_250">50dp</dimen>
+    <dimen name="size_600">120dp</dimen>
+    <dimen name="size_1000">250dp</dimen>
+</resources>
