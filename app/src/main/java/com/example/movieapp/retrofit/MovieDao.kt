@@ -1,5 +1,6 @@
 package com.example.movieapp.retrofit
 
+import com.example.movieapp.data.model.MovieDetailsResponse
 import com.example.movieapp.data.model.MoviesResponse
 import com.example.movieapp.util.Consts.API_KEY
 import retrofit2.http.GET
@@ -10,6 +11,14 @@ interface MovieDao {
 
     @GET("?")
     suspend fun searchMovie(
-        @Query("s")Title: String,
-        @Query("apikey") apikey: String = API_KEY): MoviesResponse
+        @Query("s")title: String,
+        @Query("page")page: Int,
+        @Query("apikey") apikey: String = API_KEY)
+    : MoviesResponse
+
+    @GET("?")
+    suspend fun showMovieDetails(
+        @Query("i")title: String,
+        @Query("apikey") apikey: String = API_KEY)
+            : MovieDetailsResponse
 }

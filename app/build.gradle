@@ -46,6 +46,7 @@ dependencies {
     def glide_version = "4.14.2"
     def hilt_version = "2.44"
     def retrofit_version = "2.9.0"
+    def paging_version = "3.1.1"
 
     implementation 'androidx.core:core-ktx:1.9.0'
     implementation 'androidx.appcompat:appcompat:1.5.1'
@@ -102,4 +103,6 @@ dependencies {
     implementation "com.squareup.retrofit2:retrofit:$retrofit_version"
     implementation "com.google.code.gson:gson:$retrofit_version"
     implementation "com.squareup.retrofit2:converter-gson:$retrofit_version"
+
+    implementation "androidx.paging:paging-runtime-ktx:$paging_version"
 }

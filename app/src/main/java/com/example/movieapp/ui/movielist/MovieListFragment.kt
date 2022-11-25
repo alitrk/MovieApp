@@ -51,14 +51,13 @@ class MovieListFragment : Fragment() {
                     movieViewState.consumableErrors?.let { consumableError ->
                         consumableError.firstOrNull()?.let { error ->
                             Toast.makeText(context, error.exception, Toast.LENGTH_SHORT).show()
-                            movieListViewModel.errorConsumed(error.id)
                         }
                     }
-
                     binding.isLoading = movieViewState.isLoading
-
-                    if (movieViewState.movieResponse?.movieList != null) {
-                        movieListAdapter.submitList(movieViewState.movieResponse.movieList)
+                    if (movieViewState.movieResponse != null) {
+                        movieViewState.movieResponse.collectLatest {
+                            movieListAdapter.submitData(it)
+                        }
                     }
                 }
             }

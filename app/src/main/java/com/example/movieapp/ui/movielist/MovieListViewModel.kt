@@ -1,6 +1,11 @@
 package com.example.movieapp.ui.movielist
 
 import androidx.lifecycle.*
+import androidx.paging.PagingData
+import androidx.paging.cachedIn
+import androidx.paging.insertSeparators
+import androidx.paging.map
+import com.example.movieapp.data.model.Movie
 import com.example.movieapp.data.model.MoviesResponse
 import com.example.movieapp.data.repo.MovieRepository
 import com.example.movieapp.error.ConsumableError
@@ -16,58 +21,56 @@ class MovieListViewModel @Inject constructor(var mrepo: MovieRepository) : ViewM
 
     private val _viewState = MutableStateFlow(MovieListViewState())
     val viewState: StateFlow<MovieListViewState> = _viewState.asStateFlow()
+    var index = 1
+    private fun searchMovie(title: String): Flow<PagingData<UiModel>> =
+        mrepo.searchMovie(title)
+            .map { pagingData -> pagingData.map { UiModel.RepoItem(it, index++) } }
+            .map {
+                it.insertSeparators { before, after ->
+                    if (after == null) {
+                        // we're at the end of the list
+                        return@insertSeparators null
+                    }
+                    if (before == null) {
+                        // we're at the beginning of the list
+                        return@insertSeparators UiModel.SeparatorItem(1)
+                    }
+                    if (before.index % 10 == 0) {
+                        return@insertSeparators UiModel.SeparatorItem((before.index / 10) + 1)
 
-    init {
-        _viewState.update {
-            it.copy(
-                isLoading = true,
-            )
-        }
-        //fetchPopularMovies("batman")
-    }
+                    } else {
+                        null
+                    }
+                }
+            }
 
     fun fetchPopularMovies(title: String) {
         viewModelScope.launch {
-            delay(2000)
-            val movieResponse = mrepo.searchMovie(title)
-            if (movieResponse.response == "True"){
-                _viewState.update {
-                    it.copy(
-                        isLoading = false,
-                        movieResponse = movieResponse
-                    )
-                }
-            }else{
-                addErrorToList(movieResponse.error)
-            }
-
-        }
-    }
-
-    private fun addErrorToList(exception: String?) {
-        exception?.let {
-            val errorList =
-                _viewState.value.consumableErrors?.toMutableList() ?: mutableListOf()
-            errorList.add(ConsumableError(exception = it))
-            _viewState.value =
-                viewState.value.copy(
-                    consumableErrors = errorList,
-                    isLoading = false
+            _viewState.update {
+                it.copy(
+                    isLoading = true,
                 )
-        }
-    }
 
-    fun errorConsumed(errorId: Long) {
-        _viewState.update { currentUiState ->
-            val newConsumableError =
-                currentUiState.consumableErrors?.filterNot { it.id == errorId }
-            currentUiState.copy(consumableErrors = newConsumableError, isLoading = false)
+            }
+            val movieResponse = searchMovie(title)
+            _viewState.update {
+                it.copy(
+                    isLoading = false,
+                    movieResponse= movieResponse
+                )
+            }
         }
     }
 }
 
 data class MovieListViewState(
     val isLoading: Boolean? = false,
-    val movieResponse: MoviesResponse? = null,
+    val movieResponse: Flow<PagingData<UiModel>>? = null,
     val consumableErrors: List<ConsumableError>? = null
 )
+
+
+sealed class UiModel {
+    data class RepoItem(val movie: Movie, val index: Int) : UiModel()
+    data class SeparatorItem(val pageNum: Int) : UiModel()
+}
