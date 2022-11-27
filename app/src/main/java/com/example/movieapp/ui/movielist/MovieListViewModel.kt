@@ -1,17 +1,14 @@
 package com.example.movieapp.ui.movielist
 
-import androidx.lifecycle.*
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
-import androidx.paging.cachedIn
 import androidx.paging.insertSeparators
 import androidx.paging.map
 import com.example.movieapp.data.model.Movie
-import com.example.movieapp.data.model.MoviesResponse
 import com.example.movieapp.data.repo.MovieRepository
 import com.example.movieapp.error.ConsumableError
-import com.example.movieapp.util.DummyData.movieResponse
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -56,12 +53,16 @@ class MovieListViewModel @Inject constructor(var mrepo: MovieRepository) : ViewM
             _viewState.update {
                 it.copy(
                     isLoading = false,
-                    movieResponse= movieResponse
+                    movieResponse = movieResponse
                 )
             }
         }
     }
+
 }
+
+
+
 
 data class MovieListViewState(
     val isLoading: Boolean? = false,

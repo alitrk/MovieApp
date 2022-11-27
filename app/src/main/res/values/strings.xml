@@ -14,4 +14,6 @@
     <string name="director">Director</string>
     <string name="writer">Writer</string>
     <string name="actors">Actors</string>
+    <string name="country">Country</string>
+    <string name="box_office">Box Office</string>
 </resources>

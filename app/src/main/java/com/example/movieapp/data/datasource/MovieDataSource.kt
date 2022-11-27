@@ -5,13 +5,10 @@ import androidx.paging.PagingConfig
 import androidx.paging.PagingData
 import com.example.movieapp.data.model.Movie
 import com.example.movieapp.data.model.MovieDetailsResponse
-import com.example.movieapp.data.model.MoviesResponse
 import com.example.movieapp.data.pagingdatasource.MoviePagingDataSource
 import com.example.movieapp.retrofit.MovieDao
-import kotlinx.coroutines.Dispatchers
+import com.example.movieapp.util.Resource
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.withContext
-import java.io.EOFException
 
 class MovieDataSource (var mdao: MovieDao){
     fun searchMovie(title: String): Flow<PagingData<Movie>> =
@@ -28,8 +25,19 @@ class MovieDataSource (var mdao: MovieDao){
         const val PAGE_SIZE = 10
     }
 
-    suspend fun showMovieDetails(id:String): MovieDetailsResponse =
-        withContext(Dispatchers.IO){
-            mdao.showMovieDetails(id)
+
+    suspend fun showMovieDetails(id: String): Resource<MovieDetailsResponse> {
+        return try {
+            val response = mdao.showMovieDetails(id)
+            if (response.isSuccessful) {
+                response.body()?.let {
+                    return@let Resource.success(it)
+                } ?: Resource.error("Error",null)
+            } else {
+                Resource.error("Error",null)
+            }
+        } catch (e: Exception) {
+            Resource.error("No data!",null)
         }
+    }
 }

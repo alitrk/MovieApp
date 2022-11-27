@@ -13,6 +13,9 @@ class MoviePagingDataSource (private val movieDao: MovieDao, private val title: 
         return try {
             val response = movieDao.searchMovie(title, page)
             val movie = response.movieList
+            if(response.response == "False"){
+                throw java.lang.Exception(response.error)
+            }
             LoadResult.Page(
                 data = movie,
                 prevKey = if (page == STARTING_PAGE_INDEX) null else page.minus(1),

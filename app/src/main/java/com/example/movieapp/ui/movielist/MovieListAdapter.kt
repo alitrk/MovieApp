@@ -1,17 +1,15 @@
 package com.example.movieapp.ui.movielist
 
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
+import androidx.navigation.Navigation
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
-import androidx.recyclerview.widget.ListAdapter
-import androidx.recyclerview.widget.RecyclerView
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.example.movieapp.R
-import com.example.movieapp.data.model.Movie
 import com.example.movieapp.databinding.MovieListItemBinding
 import com.example.movieapp.databinding.MovieSeperatorBinding
+import com.example.movieapp.util.navigate
 
 class MovieListAdapter : PagingDataAdapter<UiModel, ViewHolder>(UIMODEL_COMPARATOR) {
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
@@ -35,6 +33,7 @@ class MovieListAdapter : PagingDataAdapter<UiModel, ViewHolder>(UIMODEL_COMPARAT
     }
 
     class MoviesViewHolder(private val binding: MovieListItemBinding) : ViewHolder(binding.root) {
+        val _binding = binding
         fun bind(item: UiModel.RepoItem) {
             binding.movie = item.movie
             binding.executePendingBindings()
@@ -67,10 +66,18 @@ class MovieListAdapter : PagingDataAdapter<UiModel, ViewHolder>(UIMODEL_COMPARAT
         val uiModel = getItem(position)
         uiModel.let {
             when (uiModel) {
-                is UiModel.RepoItem -> (holder as MoviesViewHolder).bind(uiModel)
+                is UiModel.RepoItem -> {
+                    (holder as MoviesViewHolder).bind(uiModel)
+                    val binding = holder._binding
+                    binding.recyclerViewRowMovie.setOnClickListener {
+                        val navigate = MovieListFragmentDirections.actionNavigationMovieListToMovieDetailsFragment(uiModel.movie.id)
+                        Navigation.navigate(it,navigate)
+                    }
+                }
                 is UiModel.SeparatorItem -> (holder as SeparatorViewHolder).bind(uiModel)
                 else -> {}
             }
+
         }
     }
 
