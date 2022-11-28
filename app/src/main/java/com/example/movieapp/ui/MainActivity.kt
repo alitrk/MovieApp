@@ -5,6 +5,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import androidx.navigation.fragment.NavHostFragment
 import androidx.navigation.ui.AppBarConfiguration
+import androidx.navigation.ui.NavigationUI
 import androidx.navigation.ui.setupWithNavController
 import com.example.movieapp.R
 import com.example.movieapp.databinding.ActivityMainBinding
@@ -24,8 +25,11 @@ class MainActivity : AppCompatActivity() {
 
         val navHostFragment =
             supportFragmentManager.findFragmentById(R.id.fragmentContainerView) as NavHostFragment
+
         val navController = navHostFragment.navController
         val appBarConfiguration = AppBarConfiguration(navController.graph)
+        setSupportActionBar(binding.toolbar)
+        binding.toolbar.setNavigationOnClickListener { NavigationUI.navigateUp(navController, appBarConfiguration) }
         binding.toolbar.setupWithNavController(navController, appBarConfiguration)
     }
 }

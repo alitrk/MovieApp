@@ -19,6 +19,7 @@ class MovieListViewModel @Inject constructor(var mrepo: MovieRepository) : ViewM
     private val _viewState = MutableStateFlow(MovieListViewState())
     val viewState: StateFlow<MovieListViewState> = _viewState.asStateFlow()
     var index = 1
+    val roomMovieList = mrepo.getMovies()
     private fun searchMovie(title: String): Flow<PagingData<UiModel>> =
         mrepo.searchMovie(title)
             .map { pagingData -> pagingData.map { UiModel.RepoItem(it, index++) } }
@@ -58,6 +59,15 @@ class MovieListViewModel @Inject constructor(var mrepo: MovieRepository) : ViewM
             }
         }
     }
+
+    fun insertMovie(movie: Movie) = viewModelScope.launch {
+        mrepo.insertMovie(movie)
+    }
+
+    fun deleteMovie(movie: Movie) = viewModelScope.launch {
+        mrepo.deleteMovie(movie)
+    }
+
 
 }
 

@@ -17,10 +17,23 @@
     <fragment
         android:id="@+id/movieDetailsFragment"
         android:name="com.example.movieapp.ui.moviedetails.MovieDetailsFragment"
-        android:label="fragment_movie_details"
+        android:label="{title}"
         tools:layout="@layout/fragment_movie_details" >
         <argument
-            android:name="id"
-            app:argType="string" />
+            android:name="movie"
+            app:argType="com.example.movieapp.data.model.Movie"
+            app:nullable="true" />
+        <argument
+            android:name="title"
+            app:argType="string"
+            app:nullable="true" />
+        <action
+            android:id="@+id/action_movieDetailsFragment_to_favouriteMoviesFragment"
+            app:destination="@id/favouriteMoviesFragment" />
     </fragment>
+    <fragment
+        android:id="@+id/favouriteMoviesFragment"
+        android:name="com.example.movieapp.ui.favouritemovies.FavouriteMoviesFragment"
+        android:label="fragment_favourite_movies"
+        tools:layout="@layout/fragment_favourite_movies" />
 </navigation>

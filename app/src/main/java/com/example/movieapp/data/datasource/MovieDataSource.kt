@@ -7,6 +7,7 @@ import com.example.movieapp.data.model.Movie
 import com.example.movieapp.data.model.MovieDetailsResponse
 import com.example.movieapp.data.pagingdatasource.MoviePagingDataSource
 import com.example.movieapp.retrofit.MovieDao
+import com.example.movieapp.room.MovieRoomDao
 import com.example.movieapp.util.Resource
 import kotlinx.coroutines.flow.Flow
 
@@ -40,4 +41,8 @@ class MovieDataSource (var mdao: MovieDao){
             Resource.error("No data!",null)
         }
     }
+
+   /* override suspend fun insertArt(movie: Movie) {
+        artDao.insertArt(art)
+    }*/
 }

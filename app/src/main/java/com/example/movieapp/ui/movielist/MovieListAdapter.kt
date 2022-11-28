@@ -1,17 +1,22 @@
 package com.example.movieapp.ui.movielist
 
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
+import androidx.lifecycle.LiveData
 import androidx.navigation.Navigation
 import androidx.paging.PagingDataAdapter
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.RecyclerView.ViewHolder
 import com.example.movieapp.R
+import com.example.movieapp.data.model.Movie
 import com.example.movieapp.databinding.MovieListItemBinding
 import com.example.movieapp.databinding.MovieSeperatorBinding
 import com.example.movieapp.util.navigate
+import com.google.android.material.snackbar.Snackbar
 
-class MovieListAdapter : PagingDataAdapter<UiModel, ViewHolder>(UIMODEL_COMPARATOR) {
+class MovieListAdapter(private val movieList: ArrayList<Movie>) : PagingDataAdapter<UiModel, ViewHolder>(UIMODEL_COMPARATOR) {
+    var listener : ItemClickListener ?= null
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
 
         return if (viewType == R.layout.movie_list_item) {
@@ -69,9 +74,30 @@ class MovieListAdapter : PagingDataAdapter<UiModel, ViewHolder>(UIMODEL_COMPARAT
                 is UiModel.RepoItem -> {
                     (holder as MoviesViewHolder).bind(uiModel)
                     val binding = holder._binding
+                    if (movieList.contains(uiModel.movie)){
+                        binding.ibMovieItemFav.setImageResource(R.drawable.ic_favorite)
+                        binding.ibMovieItemFav.setTag("favourite")
+                    }else{
+                        binding.ibMovieItemFav.setImageResource(R.drawable.ic_not_favorite)
+                        binding.ibMovieItemFav.setTag("notFavourite")
+                    }
                     binding.recyclerViewRowMovie.setOnClickListener {
-                        val navigate = MovieListFragmentDirections.actionNavigationMovieListToMovieDetailsFragment(uiModel.movie.id)
+                        val navigate = MovieListFragmentDirections.actionNavigationMovieListToMovieDetailsFragment(uiModel.movie,uiModel.movie.title)
                         Navigation.navigate(it,navigate)
+                    }
+
+                    binding.ibMovieItemFav.setOnClickListener {
+                        if(binding.ibMovieItemFav.getTag()=="notFavourite"){
+                            listener?.onButtonClickInsert(uiModel.movie)
+                            binding.ibMovieItemFav.setImageResource(R.drawable.ic_favorite)
+                            binding.ibMovieItemFav.setTag("favourite")
+                            Snackbar.make(it,"${uiModel.movie.title} has been added to your favourites", Snackbar.LENGTH_SHORT).show()
+                        }else{
+                            listener?.onButtonClickDelete(uiModel.movie)
+                            binding.ibMovieItemFav.setImageResource(R.drawable.ic_not_favorite)
+                            binding.ibMovieItemFav.setTag("notFavourite")
+                            Snackbar.make(it,"${uiModel.movie.title} has been removed from your favourites", Snackbar.LENGTH_SHORT).show()
+                        }
                     }
                 }
                 is UiModel.SeparatorItem -> (holder as SeparatorViewHolder).bind(uiModel)
@@ -80,5 +106,15 @@ class MovieListAdapter : PagingDataAdapter<UiModel, ViewHolder>(UIMODEL_COMPARAT
 
         }
     }
+
+    fun updateRoom(movieListNew: List<Movie>){
+        movieList.clear()
+        movieList.addAll(movieListNew)
+    }
+}
+
+interface ItemClickListener{
+    fun onButtonClickDelete(item : Movie)
+    fun onButtonClickInsert(item : Movie)
 
 }

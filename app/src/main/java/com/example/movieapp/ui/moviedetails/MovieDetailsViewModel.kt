@@ -1,5 +1,6 @@
 package com.example.movieapp.ui.moviedetails
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
@@ -14,6 +15,8 @@ import javax.inject.Inject
 class MovieDetailsViewModel @Inject constructor(var mrepo: MovieRepository) : ViewModel(){
 
     var movieDetails = MutableLiveData<Resource<MovieDetailsResponse>>()
+    val roomMovieListDetails = mrepo.getMovies()
+
 
 
     fun showMovieDetails(id:String) {
@@ -22,4 +25,5 @@ class MovieDetailsViewModel @Inject constructor(var mrepo: MovieRepository) : Vi
             movieDetails.value = response
         }
     }
+
 }
