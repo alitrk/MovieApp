@@ -76,10 +76,10 @@ class MovieListAdapter(private val movieList: ArrayList<Movie>) : PagingDataAdap
                     val binding = holder._binding
                     if (movieList.contains(uiModel.movie)){
                         binding.ibMovieItemFav.setImageResource(R.drawable.ic_favorite)
-                        binding.ibMovieItemFav.setTag("favourite")
+                        binding.ibMovieItemFav.tag = "favourite"
                     }else{
                         binding.ibMovieItemFav.setImageResource(R.drawable.ic_not_favorite)
-                        binding.ibMovieItemFav.setTag("notFavourite")
+                        binding.ibMovieItemFav.tag = "notFavourite"
                     }
                     binding.recyclerViewRowMovie.setOnClickListener {
                         val navigate = MovieListFragmentDirections.actionNavigationMovieListToMovieDetailsFragment(uiModel.movie,uiModel.movie.title)
@@ -87,15 +87,15 @@ class MovieListAdapter(private val movieList: ArrayList<Movie>) : PagingDataAdap
                     }
 
                     binding.ibMovieItemFav.setOnClickListener {
-                        if(binding.ibMovieItemFav.getTag()=="notFavourite"){
+                        if(binding.ibMovieItemFav.tag =="notFavourite"){
                             listener?.onButtonClickInsert(uiModel.movie)
                             binding.ibMovieItemFav.setImageResource(R.drawable.ic_favorite)
-                            binding.ibMovieItemFav.setTag("favourite")
+                            binding.ibMovieItemFav.tag = "favourite"
                             Snackbar.make(it,"${uiModel.movie.title} has been added to your favourites", Snackbar.LENGTH_SHORT).show()
                         }else{
                             listener?.onButtonClickDelete(uiModel.movie)
                             binding.ibMovieItemFav.setImageResource(R.drawable.ic_not_favorite)
-                            binding.ibMovieItemFav.setTag("notFavourite")
+                            binding.ibMovieItemFav.tag = "notFavourite"
                             Snackbar.make(it,"${uiModel.movie.title} has been removed from your favourites", Snackbar.LENGTH_SHORT).show()
                         }
                     }

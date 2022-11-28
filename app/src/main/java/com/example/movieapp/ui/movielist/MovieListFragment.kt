@@ -112,7 +112,7 @@ class MovieListFragment : Fragment(), ItemClickListener {
     }
 
     fun fabOnClick(view: View){
-        Navigation.navigate(view, R.id.action_movieDetailsFragment_to_favouriteMoviesFragment)
+        Navigation.navigate(view, R.id.action_navigation_movie_list_to_favouriteMoviesFragment)
     }
 
 }

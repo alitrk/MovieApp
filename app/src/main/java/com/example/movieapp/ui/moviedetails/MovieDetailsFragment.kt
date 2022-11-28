@@ -91,7 +91,6 @@ class MovieDetailsFragment : Fragment() {
                 override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
                     when(menuItem.itemId){
                         R.id.favourites_icon-> {
-                            //todo
                             return true
                         }
                         else -> return false
