@@ -1,53 +1,54 @@
 package com.example.movieapp.data.model
 
+import androidx.room.Entity
+import androidx.room.PrimaryKey
 import com.google.gson.annotations.SerializedName
 
+@Entity(tableName = "movieDetails")
 data class MovieDetailsResponse(
     @SerializedName("Actors")
-    val actors: String,
+    val actors: String? = "",
 
     @SerializedName ("BoxOffice")
-    val boxOffice: String,
+    val boxOffice: String? = "",
 
     @SerializedName ("Country")
-    val country: String,
+    val country: String? = "",
 
     @SerializedName ("Director")
-    val director: String,
+    val director: String? = "",
 
     @SerializedName ("Language")
-    val language: String,
+    val language: String? = "",
 
     @SerializedName ("Plot")
-    val plot: String,
+    val plot: String? = "",
 
     @SerializedName ("Poster")
-    val poster: String,
-
-    @SerializedName ("Ratings")
-    val ratings: List<Rating>,
+    val poster: String? = "",
 
     @SerializedName ("Response")
-    val response: String,
+    val response: String? = "",
 
     @SerializedName ("Runtime")
-    val runtime: String,
+    val runtime: String? = "",
 
     @SerializedName ("Title")
-    val title: String,
+    val title: String? = "",
 
     @SerializedName ("Writer")
-    val writer: String,
+    val writer: String? = "",
 
     @SerializedName ("Year")
-    val year: String,
+    val year: String? = "",
 
+    @PrimaryKey
     @SerializedName ("imdbID")
     val id: String,
 
     @SerializedName ("imdbRating")
-    val rating: String,
+    val rating: String? = "",
 
     @SerializedName ("Error")
-    val error: String
+    val error: String? = ""
 )

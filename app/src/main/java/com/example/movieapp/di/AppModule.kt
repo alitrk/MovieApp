@@ -48,7 +48,8 @@ class AppModule {
     @Singleton
     fun injectRoomDatabase(
         @ApplicationContext context: Context
-    ) = Room.databaseBuilder(context, MovieRoomDatabase::class.java,"movies").build()
+    ) = Room.databaseBuilder(context, MovieRoomDatabase::class.java,"movies").fallbackToDestructiveMigration()
+        .build()
 
     @Provides
     @Singleton

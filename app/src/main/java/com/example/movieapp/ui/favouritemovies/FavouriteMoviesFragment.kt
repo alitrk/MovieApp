@@ -1,25 +1,19 @@
 package com.example.movieapp.ui.favouritemovies
 
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
-import android.view.View.inflate
 import android.view.ViewGroup
+import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.Observer
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.example.movieapp.R
 import com.example.movieapp.data.model.Movie
-import com.example.movieapp.databinding.ActivityMainBinding.inflate
 import com.example.movieapp.databinding.FragmentFavouriteMoviesBinding
-import com.example.movieapp.ui.movielist.ItemClickListener
-import com.example.movieapp.ui.movielist.MovieListAdapter
-import com.example.movieapp.ui.movielist.MovieListViewModel
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
-class FavouriteMoviesFragment : Fragment(), ItemClickListener {
+class FavouriteMoviesFragment : Fragment(), FavouriteMoviesAdapter.ItemClickListenerFavourites {
 
     private var _binding: FragmentFavouriteMoviesBinding? = null
     private val binding get() = _binding!!
@@ -60,10 +54,8 @@ class FavouriteMoviesFragment : Fragment(), ItemClickListener {
 
     override fun onButtonClickDelete(item: Movie) {
         favouriteMoviesViewModel.deleteMovieFavourites(item)
+        favouriteMoviesViewModel.deleteMovieByID(item.id)
     }
 
-    override fun onButtonClickInsert(item: Movie) {
-
-    }
 
 }

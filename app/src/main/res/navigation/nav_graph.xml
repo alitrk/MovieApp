@@ -35,5 +35,22 @@
         android:id="@+id/favouriteMoviesFragment"
         android:name="com.example.movieapp.ui.favouritemovies.FavouriteMoviesFragment"
         android:label="Favourites"
-        tools:layout="@layout/fragment_favourite_movies" />
+        tools:layout="@layout/fragment_favourite_movies" >
+        <action
+            android:id="@+id/action_favouriteMoviesFragment_to_movieDetailsFromRoom"
+            app:destination="@id/movieDetailsFromRoom" />
+    </fragment>
+    <fragment
+        android:id="@+id/movieDetailsFromRoom"
+        android:name="com.example.movieapp.ui.detailsfromroom.MovieDetailsFromRoomFragment"
+        android:label="{title}" >
+        <argument
+            android:name="id"
+            app:argType="string"
+            app:nullable="true" />
+        <argument
+            android:name="title"
+            app:argType="string"
+            app:nullable="true" />
+    </fragment>
 </navigation>

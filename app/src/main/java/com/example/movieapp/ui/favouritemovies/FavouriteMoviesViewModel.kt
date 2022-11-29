@@ -13,12 +13,12 @@ class FavouriteMoviesViewModel @Inject constructor(var mrepo: MovieRepository) :
     val roomMovieListDetailsFavourites = mrepo.getMovies()
 
 
-    fun insertMovieFavourites(movie: Movie) = viewModelScope.launch {
-        mrepo.insertMovie(movie)
-    }
-
     fun deleteMovieFavourites(movie: Movie) = viewModelScope.launch {
         mrepo.deleteMovie(movie)
+    }
+
+    fun deleteMovieByID(id: String) = viewModelScope.launch {
+        mrepo.deleteMovieByID(id)
     }
 
 }

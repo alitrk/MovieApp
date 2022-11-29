@@ -22,4 +22,14 @@ class MovieRepository (var mds: MovieDataSource, var movieRoomDataSource: MovieR
 
     fun getMovies(): LiveData<List<Movie>> = movieRoomDataSource.observeMovies()
 
+    //Room Details
+    suspend fun insertMovieDetails(movieDetailsResponse: MovieDetailsResponse) = movieRoomDataSource.insertMovieDetails(movieDetailsResponse)
+
+    suspend fun deleteMovieDetails(movieDetailsResponse: MovieDetailsResponse) = movieRoomDataSource.deleteMovieDetails(movieDetailsResponse)
+
+    suspend fun deleteMovieByID(id: String) = movieRoomDataSource.deleteMovieByID(id)
+
+    suspend fun observeMovieDetails(id: String):MovieDetailsResponse = movieRoomDataSource.observeMovieDetails(id)
+
+
 }

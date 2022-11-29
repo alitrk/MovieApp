@@ -50,8 +50,8 @@ class MovieListFragment : Fragment(), ItemClickListener {
             adapter = movieListAdapter
         }
         errorMsg()
-        observeData()
         subscribeToObservers()
+        observeData()
     }
 
 
@@ -105,14 +105,18 @@ class MovieListFragment : Fragment(), ItemClickListener {
 
     override fun onButtonClickDelete(item: Movie) {
         viewModel.deleteMovie(item)
+        viewModel.deleteMovieDetails(item)
     }
 
     override fun onButtonClickInsert(item: Movie) {
         viewModel.insertMovie(item)
+        viewModel.insertMovieDetails(item)
     }
 
     fun fabOnClick(view: View){
         Navigation.navigate(view, R.id.action_navigation_movie_list_to_favouriteMoviesFragment)
     }
+
+
 
 }
