@@ -6,6 +6,7 @@
         android:id="@+id/favourites_icon"
         android:title="@string/favourites_menu_title"
         android:icon="@drawable/ic_favorite"
+        android:enabled="false"
         app:showAsAction="always"/>
 
 </menu>
