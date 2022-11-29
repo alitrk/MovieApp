@@ -87,6 +87,11 @@ class MovieListFragment : Fragment(), ItemClickListener {
         _binding = null
     }
 
+    override fun onPause() {
+        super.onPause()
+        viewModel.index=1
+    }
+
     fun searchOnClick(searchInput: String){
         if (searchInput!=""){
             viewModel.fetchPopularMovies(searchInput)
