@@ -41,7 +41,4 @@ class MovieDataSource (var mdao: MovieDao){
         }
     }
 
-   /* override suspend fun insertArt(movie: Movie) {
-        artDao.insertArt(art)
-    }*/
 }

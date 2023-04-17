@@ -30,12 +30,12 @@ class MovieListFragment : Fragment(), ItemClickListener {
     private var _binding: FragmentMovieListBinding? = null
     private val binding get() = _binding!!
     private var moviesFromRoom: ArrayList<Movie> = arrayListOf()
-    private val movieListAdapter: MovieListAdapter by lazy { MovieListAdapter(moviesFromRoom)}
+    private val movieListAdapter: MovieListAdapter by lazy { MovieListAdapter(moviesFromRoom) }
     private val movieListViewModel: MovieListViewModel by viewModels()
 
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
-        savedInstanceState: Bundle?
+            inflater: LayoutInflater, container: ViewGroup?,
+            savedInstanceState: Bundle?
     ): View {
         _binding = FragmentMovieListBinding.inflate(inflater, container, false)
         binding.movieListFragment = this
@@ -47,7 +47,10 @@ class MovieListFragment : Fragment(), ItemClickListener {
         movieListAdapter.listener = this
         binding.rvMovieList.apply {
             layoutManager = LinearLayoutManager(requireContext())
-            adapter = movieListAdapter
+            adapter = movieListAdapter.withLoadStateHeaderAndFooter(
+                    header = MovieLoadStateAdapter { movieListAdapter.retry() },
+                    footer = MovieLoadStateAdapter { movieListAdapter.retry() }
+            )
         }
         errorMsg()
         subscribeToObservers()
@@ -70,13 +73,13 @@ class MovieListFragment : Fragment(), ItemClickListener {
         }
     }
 
-    private fun errorMsg(){
-        viewLifecycleOwner.lifecycleScope.launch{
+    private fun errorMsg() {
+        viewLifecycleOwner.lifecycleScope.launch {
             movieListAdapter.loadStateFlow.collectLatest { loadStates ->
-                if (loadStates.refresh is LoadState.Error){
+                if (loadStates.refresh is LoadState.Error) {
                     movieListAdapter.submitData(viewLifecycleOwner.lifecycle, PagingData.empty())
                     val errorMessage = (loadStates.refresh as LoadState.Error).error.message
-                    Toast.makeText(context,errorMessage,Toast.LENGTH_SHORT).show()
+                    Toast.makeText(context, errorMessage, Toast.LENGTH_SHORT).show()
                 }
             }
         }
@@ -89,11 +92,11 @@ class MovieListFragment : Fragment(), ItemClickListener {
 
     override fun onPause() {
         super.onPause()
-        viewModel.index=1
+        viewModel.index = 1
     }
 
-    fun searchOnClick(searchInput: String){
-        if (searchInput!=""){
+    fun searchOnClick(searchInput: String) {
+        if (searchInput != "") {
             viewModel.fetchPopularMovies(searchInput)
             observeData()
             errorMsg()
@@ -118,10 +121,9 @@ class MovieListFragment : Fragment(), ItemClickListener {
         viewModel.insertMovieDetails(item)
     }
 
-    fun fabOnClick(view: View){
+    fun fabOnClick(view: View) {
         Navigation.navigate(view, R.id.action_navigation_movie_list_to_favouriteMoviesFragment)
     }
-
 
 
 }
