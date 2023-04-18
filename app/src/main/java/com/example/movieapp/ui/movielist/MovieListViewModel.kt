@@ -1,16 +1,14 @@
 package com.example.movieapp.ui.movielist
 
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
+import androidx.paging.cachedIn
 import androidx.paging.insertSeparators
 import androidx.paging.map
 import com.example.movieapp.data.model.Movie
-import com.example.movieapp.data.model.MovieDetailsResponse
 import com.example.movieapp.data.repo.MovieRepository
 import com.example.movieapp.error.ConsumableError
-import com.example.movieapp.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -21,7 +19,6 @@ class MovieListViewModel @Inject constructor(var mrepo: MovieRepository) : ViewM
 
     private val _viewState = MutableStateFlow(MovieListViewState())
     val viewState: StateFlow<MovieListViewState> = _viewState.asStateFlow()
-    var movieDetails = MutableLiveData<Resource<MovieDetailsResponse>>()
     var index = 1
     val roomMovieList = mrepo.getMovies()
     private fun searchMovie(title: String): Flow<PagingData<UiModel>> =
@@ -54,7 +51,7 @@ class MovieListViewModel @Inject constructor(var mrepo: MovieRepository) : ViewM
                 )
 
             }
-            val movieResponse = searchMovie(title)
+            val movieResponse = searchMovie(title).cachedIn(viewModelScope)
             _viewState.update {
                 it.copy(
                     isLoading = false,

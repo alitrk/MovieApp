@@ -17,4 +17,6 @@
     <string name="country">Country</string>
     <string name="box_office">Box Office</string>
     <string name="favourites_menu_title">Favourites selected</string>
+    <string name="results_could_not_be_loaded">Results could not be loaded</string>
+    <string name="retry_btn">Retry</string>
 </resources>
