@@ -45,17 +45,19 @@ class MovieListViewModel @Inject constructor(var mrepo: MovieRepository) : ViewM
 
     fun fetchPopularMovies(title: String) {
         viewModelScope.launch {
-            _viewState.update {
-                it.copy(
-                    isLoading = true,
-                )
-
-            }
-            val movieResponse = searchMovie(title).cachedIn(viewModelScope)
-            _viewState.update {
-                it.copy(
+            // set isLoading to true before fetching data
+            _viewState.value = _viewState.value.copy(isLoading = true)
+            try {
+                val movieResponse = searchMovie(title).cachedIn(viewModelScope)
+                // set isLoading to false and update the movie list on success
+                _viewState.value = _viewState.value.copy(
                     isLoading = false,
                     movieResponse = movieResponse
+                )
+            } catch (e: Exception) {
+
+                _viewState.value = _viewState.value.copy(
+                    isLoading = false,
                 )
             }
         }
@@ -69,14 +71,14 @@ class MovieListViewModel @Inject constructor(var mrepo: MovieRepository) : ViewM
         mrepo.deleteMovie(movie)
     }
 
-    fun insertMovieDetails(movie: Movie){
+    fun insertMovieDetails(movie: Movie) {
         viewModelScope.launch {
             val movieDetailsResponse = mrepo.showMovieDetails(movie.id).data!!
             mrepo.insertMovieDetails(movieDetailsResponse)
         }
     }
 
-    fun deleteMovieDetails(movie: Movie){
+    fun deleteMovieDetails(movie: Movie) {
         viewModelScope.launch {
             val movieDetailsResponse = mrepo.showMovieDetails(movie.id).data!!
             mrepo.deleteMovieDetails(movieDetailsResponse)
@@ -84,8 +86,6 @@ class MovieListViewModel @Inject constructor(var mrepo: MovieRepository) : ViewM
     }
 
 }
-
-
 
 
 data class MovieListViewState(

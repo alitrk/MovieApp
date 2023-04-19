@@ -34,8 +34,8 @@ class MovieListFragment : Fragment(), ItemClickListener {
     private val movieListViewModel: MovieListViewModel by viewModels()
 
     override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
+        inflater: LayoutInflater, container: ViewGroup?,
+        savedInstanceState: Bundle?
     ): View {
         _binding = FragmentMovieListBinding.inflate(inflater, container, false)
         binding.movieListFragment = this
@@ -48,10 +48,11 @@ class MovieListFragment : Fragment(), ItemClickListener {
         binding.rvMovieList.apply {
             layoutManager = LinearLayoutManager(requireContext())
             adapter = movieListAdapter.withLoadStateHeaderAndFooter(
-                    header = MovieLoadStateAdapter { movieListAdapter.retry() },
-                    footer = MovieLoadStateAdapter { movieListAdapter.retry() }
+                header = MovieLoadStateAdapter { movieListAdapter.retry() },
+                footer = MovieLoadStateAdapter { movieListAdapter.retry() }
             )
         }
+
         errorMsg()
         subscribeToObservers()
         observeData()
@@ -63,15 +64,14 @@ class MovieListFragment : Fragment(), ItemClickListener {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
                 movieListViewModel.viewState.collectLatest { movieViewState ->
                     binding.isLoading = movieViewState.isLoading
-                    if (movieViewState.movieResponse != null) {
-                        movieViewState.movieResponse.collectLatest {
-                            movieListAdapter.submitData(it)
-                        }
+                    movieViewState.movieResponse?.collectLatest {
+                        movieListAdapter.submitData(it)
                     }
                 }
             }
         }
     }
+
 
     private fun errorMsg() {
         viewLifecycleOwner.lifecycleScope.launch {
@@ -98,8 +98,6 @@ class MovieListFragment : Fragment(), ItemClickListener {
     fun searchOnClick(searchInput: String) {
         if (searchInput != "") {
             viewModel.fetchPopularMovies(searchInput)
-            observeData()
-            errorMsg()
             viewModel.index = 1
         }
     }
