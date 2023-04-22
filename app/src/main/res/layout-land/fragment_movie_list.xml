@@ -4,11 +4,6 @@
     xmlns:tools="http://schemas.android.com/tools">
 
     <data>
-
-        <variable
-            name="isLoading"
-            type="Boolean" />
-
         <import type="android.view.View" />
 
         <variable
@@ -60,7 +55,7 @@
             android:layout_weight="0.9"
             android:layoutAnimation="@anim/layout_animator"
             android:scrollbars="vertical"
-            android:visibility="@{isLoading ? View.GONE : View.VISIBLE}"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -70,10 +65,76 @@
             android:id="@+id/pb_movie_list"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:visibility="@{isLoading ? View.VISIBLE : View.GONE}"
+            android:visibility="gone"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
+
+        <Button
+                android:id="@+id/button_retry_main"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="@string/retry_btn"
+                android:visibility="gone"
+                tools:visibility="visible"
+                android:onClick="@{() -> movieListFragment.searchOnClick(etMovieListSearch.getText().toString())}"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintTop_toTopOf="parent"/>
+
+        <TextView
+                android:id="@+id/text_view_empty"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:textAlignment="center"
+                android:visibility="gone"
+                tools:visibility="visible"
+                android:text="@string/empty_text"
+                tools:text="Use the search bar to start searching for your favourite movies"
+                android:layout_marginEnd="32dp"
+                android:layout_marginStart="32dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/button_retry_main"
+                app:layout_constraintBottom_toTopOf="@+id/text_view_error_main"/>
+
+        <TextView
+                android:id="@+id/text_view_error_main"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:visibility="gone"
+                tools:visibility="visible"
+                android:textAlignment="center"
+                tools:text="There was a problem connecting to the server. Please check your internet connection and try again later."
+                android:layout_marginTop="16dp"
+                android:layout_marginEnd="32dp"
+                android:layout_marginStart="32dp"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@+id/button_retry_main"/>
+
+        <com.google.android.material.floatingactionbutton.FloatingActionButton
+                android:id="@+id/floatingActionButton"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:backgroundTint="@color/dark_red"
+                app:rippleColor="@color/dark_red"
+                app:borderWidth="0dp"
+                app:tint="@color/white"
+                android:layout_marginEnd="16dp"
+                android:layout_marginBottom="16dp"
+                android:onClick="@{() -> movieListFragment.fabOnClick(floatingActionButton)}"
+                android:clickable="true"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:srcCompat="@drawable/ic_not_favorite"
+                android:focusable="true"
+                android:minWidth="48dp"
+                android:minHeight="48dp"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </layout>

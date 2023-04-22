@@ -13,25 +13,26 @@ import com.example.movieapp.databinding.MovieSeperatorBinding
 import com.example.movieapp.util.navigate
 import com.google.android.material.snackbar.Snackbar
 
-class MovieListAdapter(private val movieList: ArrayList<Movie>) : PagingDataAdapter<UiModel, ViewHolder>(UIMODEL_COMPARATOR) {
-    var listener : ItemClickListener ?= null
+class MovieListAdapter() : PagingDataAdapter<UiModel, ViewHolder>(UIMODEL_COMPARATOR) {
+    private val movieList: ArrayList<Movie> = arrayListOf()
+    var listener: ItemClickListener? = null
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): ViewHolder {
 
         return if (viewType == R.layout.movie_list_item) {
             val binding = MovieListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
             MoviesViewHolder(binding)
         } else {
-           val binding = MovieSeperatorBinding.inflate(LayoutInflater.from(parent.context), parent, false)
+            val binding = MovieSeperatorBinding.inflate(LayoutInflater.from(parent.context), parent, false)
             SeparatorViewHolder(binding)
         }
     }
 
 
     override fun getItemViewType(position: Int): Int {
-        return when (getItem(position)){
+        return when (getItem(position)) {
             is UiModel.RepoItem -> R.layout.movie_list_item
             is UiModel.SeparatorItem -> R.layout.movie_seperator
-            null -> throw  UnsupportedOperationException("Unknown view")
+            null -> throw UnsupportedOperationException("Unknown view")
         }
     }
 
@@ -78,30 +79,42 @@ class MovieListAdapter(private val movieList: ArrayList<Movie>) : PagingDataAdap
                 is UiModel.RepoItem -> {
                     (holder as MoviesViewHolder).bind(uiModel)
                     val binding = holder._binding
-                    if (movieList.contains(uiModel.movie)){
+                    if (movieList.contains(uiModel.movie)) {
                         binding.ibMovieItemFav.setImageResource(R.drawable.ic_favorite)
-                    }else{
+                    } else {
                         binding.ibMovieItemFav.setImageResource(R.drawable.ic_not_favorite)
                     }
                     binding.recyclerViewRowMovie.setOnClickListener {
-                        val navigate = MovieListFragmentDirections.actionNavigationMovieListToMovieDetailsFragment(uiModel.movie,uiModel.movie.title)
-                        Navigation.navigate(it,navigate)
+                        val navigate = MovieListFragmentDirections.actionNavigationMovieListToMovieDetailsFragment(
+                            uiModel.movie,
+                            uiModel.movie.title
+                        )
+                        Navigation.navigate(it, navigate)
                     }
 
                     binding.ibMovieItemFav.setOnClickListener {
-                        if(!binding.ibMovieItemFav.isSelected){
+                        if (!binding.ibMovieItemFav.isSelected) {
                             binding.ibMovieItemFav.setImageResource(R.drawable.ic_favorite)
                             listener?.onButtonClickInsert(uiModel.movie)
                             binding.ibMovieItemFav.isSelected = !binding.ibMovieItemFav.isSelected
-                            Snackbar.make(it,"${uiModel.movie.title} has been added to your favourites", Snackbar.LENGTH_SHORT).show()
-                        }else{
+                            Snackbar.make(
+                                it,
+                                "${uiModel.movie.title} has been added to your favourites",
+                                Snackbar.LENGTH_SHORT
+                            ).show()
+                        } else {
                             binding.ibMovieItemFav.setImageResource(R.drawable.ic_not_favorite)
                             listener?.onButtonClickDelete(uiModel.movie)
                             binding.ibMovieItemFav.isSelected = !binding.ibMovieItemFav.isSelected
-                            Snackbar.make(it,"${uiModel.movie.title} has been removed from your favourites", Snackbar.LENGTH_SHORT).show()
+                            Snackbar.make(
+                                it,
+                                "${uiModel.movie.title} has been removed from your favourites",
+                                Snackbar.LENGTH_SHORT
+                            ).show()
                         }
                     }
                 }
+
                 is UiModel.SeparatorItem -> (holder as SeparatorViewHolder).bind(uiModel)
                 else -> {}
             }
@@ -109,14 +122,14 @@ class MovieListAdapter(private val movieList: ArrayList<Movie>) : PagingDataAdap
         }
     }
 
-    fun updateRoom(movieListNew: List<Movie>){
+    fun updateRoom(movieListNew: List<Movie>) {
         movieList.clear()
         movieList.addAll(movieListNew)
     }
 }
 
-interface ItemClickListener{
-    fun onButtonClickDelete(item : Movie)
-    fun onButtonClickInsert(item : Movie)
+interface ItemClickListener {
+    fun onButtonClickDelete(item: Movie)
+    fun onButtonClickInsert(item: Movie)
 
 }

@@ -8,14 +8,13 @@ import androidx.paging.insertSeparators
 import androidx.paging.map
 import com.example.movieapp.data.model.Movie
 import com.example.movieapp.data.repo.MovieRepository
-import com.example.movieapp.error.ConsumableError
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class MovieListViewModel @Inject constructor(var mrepo: MovieRepository) : ViewModel() {
+class MovieListViewModel @Inject constructor(private var mrepo: MovieRepository) : ViewModel() {
 
     private val _viewState = MutableStateFlow(MovieListViewState())
     val viewState: StateFlow<MovieListViewState> = _viewState.asStateFlow()
@@ -45,21 +44,10 @@ class MovieListViewModel @Inject constructor(var mrepo: MovieRepository) : ViewM
 
     fun fetchPopularMovies(title: String) {
         viewModelScope.launch {
-            // set isLoading to true before fetching data
-            _viewState.value = _viewState.value.copy(isLoading = true)
-            try {
-                val movieResponse = searchMovie(title).cachedIn(viewModelScope)
-                // set isLoading to false and update the movie list on success
-                _viewState.value = _viewState.value.copy(
-                    isLoading = false,
-                    movieResponse = movieResponse
-                )
-            } catch (e: Exception) {
-
-                _viewState.value = _viewState.value.copy(
-                    isLoading = false,
-                )
-            }
+            val movieResponse = searchMovie(title).cachedIn(viewModelScope)
+            _viewState.value = _viewState.value.copy(
+                movieResponse = movieResponse
+            )
         }
     }
 
@@ -89,9 +77,7 @@ class MovieListViewModel @Inject constructor(var mrepo: MovieRepository) : ViewM
 
 
 data class MovieListViewState(
-    val isLoading: Boolean? = false,
     val movieResponse: Flow<PagingData<UiModel>>? = null,
-    val consumableErrors: List<ConsumableError>? = null
 )
 
 
