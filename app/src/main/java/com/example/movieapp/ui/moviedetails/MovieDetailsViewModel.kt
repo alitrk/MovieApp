@@ -1,8 +1,6 @@
 package com.example.movieapp.ui.moviedetails
 
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
-import androidx.lifecycle.viewModelScope
+import androidx.lifecycle.*
 import com.example.movieapp.data.model.MovieDetailsResponse
 import com.example.movieapp.data.repo.MovieRepository
 import com.example.movieapp.util.Resource
@@ -13,18 +11,24 @@ import javax.inject.Inject
 @HiltViewModel
 class MovieDetailsViewModel @Inject constructor(var mrepo: MovieRepository) : ViewModel(){
 
-    var movieDetails = MutableLiveData<Resource<MovieDetailsResponse>>()
-    val roomMovieListDetails = mrepo.getMovies()
+    var movieDetailsFromApi = MutableLiveData<Resource<MovieDetailsResponse>>()
+
+    var movieDetailsFromRoom = MutableLiveData<MovieDetailsResponse>()
 
 
 
-    fun showMovieDetails(id:String) {
+    fun showMovieDetailsFromRoom(id:String) {
         viewModelScope.launch {
-            val response = mrepo.showMovieDetails(id)
-            movieDetails.value = response
-
-
+            movieDetailsFromRoom.postValue(mrepo.observeMovieDetails(id))
         }
     }
+
+    fun showMovieDetailsFromApi(id:String) {
+        viewModelScope.launch {
+            val response = mrepo.showMovieDetails(id)
+            movieDetailsFromApi.value = response
+        }
+    }
+
 
 }

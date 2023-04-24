@@ -81,13 +81,16 @@ class MovieListAdapter() : PagingDataAdapter<UiModel, ViewHolder>(UIMODEL_COMPAR
                     val binding = holder._binding
                     if (movieList.contains(uiModel.movie)) {
                         binding.ibMovieItemFav.setImageResource(R.drawable.ic_favorite)
+                        binding.ibMovieItemFav.isSelected = true
                     } else {
                         binding.ibMovieItemFav.setImageResource(R.drawable.ic_not_favorite)
+                        binding.ibMovieItemFav.isSelected = false
                     }
                     binding.recyclerViewRowMovie.setOnClickListener {
                         val navigate = MovieListFragmentDirections.actionNavigationMovieListToMovieDetailsFragment(
-                            uiModel.movie,
-                            uiModel.movie.title
+                            uiModel.movie.title,
+                            uiModel.movie.id,
+                            movieList.contains(uiModel.movie)
                         )
                         Navigation.navigate(it, navigate)
                     }
@@ -96,7 +99,7 @@ class MovieListAdapter() : PagingDataAdapter<UiModel, ViewHolder>(UIMODEL_COMPAR
                         if (!binding.ibMovieItemFav.isSelected) {
                             binding.ibMovieItemFav.setImageResource(R.drawable.ic_favorite)
                             listener?.onButtonClickInsert(uiModel.movie)
-                            binding.ibMovieItemFav.isSelected = !binding.ibMovieItemFav.isSelected
+                            binding.ibMovieItemFav.isSelected = true
                             Snackbar.make(
                                 it,
                                 "${uiModel.movie.title} has been added to your favourites",
@@ -105,7 +108,7 @@ class MovieListAdapter() : PagingDataAdapter<UiModel, ViewHolder>(UIMODEL_COMPAR
                         } else {
                             binding.ibMovieItemFav.setImageResource(R.drawable.ic_not_favorite)
                             listener?.onButtonClickDelete(uiModel.movie)
-                            binding.ibMovieItemFav.isSelected = !binding.ibMovieItemFav.isSelected
+                            binding.ibMovieItemFav.isSelected = false
                             Snackbar.make(
                                 it,
                                 "${uiModel.movie.title} has been removed from your favourites",

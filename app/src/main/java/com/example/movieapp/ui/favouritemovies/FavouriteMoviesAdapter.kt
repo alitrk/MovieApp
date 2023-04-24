@@ -22,22 +22,22 @@ class FavouriteMoviesAdapter : ListAdapter<Movie, FavouriteMoviesAdapter.Favouri
 
     override fun onBindViewHolder(holder: FavouritesMoviesViewHolder, position: Int) {
         val movie = getItem(position)
-        movie?.let {
+        movie?.let { movieItem ->
             val binding = holder._binding
             binding.ibMovieItemFavFavourites.setOnClickListener {
-                val snackbar = Snackbar.make(it,"Are you sure you want to remove the movie from your favourites list?", Snackbar.LENGTH_LONG)
+                val snackBar = Snackbar.make(it,"Are you sure you want to remove the movie from your favourites list?", Snackbar.LENGTH_LONG)
                     .setAction("Yes"){
                         listener?.onButtonClickDelete(movie)
                     }
-                snackbar.show()
+                snackBar.show()
             }
             binding.recyclerViewRowFavourite.setOnClickListener {
-                val navigate = FavouriteMoviesFragmentDirections.actionFavouriteMoviesFragmentToMovieDetailsFromRoom(movie.id, movie.title)
+                val navigate = FavouriteMoviesFragmentDirections.actionFavouriteMoviesFragmentToMovieDetailsFragment(movie.title, movie.id, true)
                 Navigation.navigate(it,navigate)
             }
 
 
-            holder.bind(it)
+            holder.bind(movieItem)
         }
     }
 

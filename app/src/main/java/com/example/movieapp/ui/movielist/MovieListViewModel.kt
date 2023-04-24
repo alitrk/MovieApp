@@ -20,34 +20,30 @@ class MovieListViewModel @Inject constructor(private var mrepo: MovieRepository)
     val viewState: StateFlow<MovieListViewState> = _viewState.asStateFlow()
     var index = 1
     val roomMovieList = mrepo.getMovies()
-    private fun searchMovie(title: String): Flow<PagingData<UiModel>> =
-        mrepo.searchMovie(title)
-            .map { pagingData -> pagingData.map { UiModel.RepoItem(it, index++) } }
-            .map {
-                it.insertSeparators { before, after ->
-                    if (after == null) {
-                        // we're at the end of the list
-                        return@insertSeparators null
-                    }
-                    if (before == null) {
-                        // we're at the beginning of the list
-                        return@insertSeparators UiModel.SeparatorItem(1)
-                    }
-                    if (before.index % 10 == 0) {
-                        return@insertSeparators UiModel.SeparatorItem((before.index / 10) + 1)
-
-                    } else {
-                        null
-                    }
-                }
-            }
-
     fun fetchPopularMovies(title: String) {
         viewModelScope.launch {
-            val movieResponse = searchMovie(title).cachedIn(viewModelScope)
-            _viewState.value = _viewState.value.copy(
-                movieResponse = movieResponse
-            )
+            val movieResponse = mrepo.searchMovie(title)
+                .map { pagingData -> pagingData.map { UiModel.RepoItem(it, index++) } }
+                .map {
+                    it.insertSeparators { before, after ->
+                        if (after == null) {
+                            // we're at the end of the list
+                            return@insertSeparators null
+                        }
+                        if (before == null) {
+                            // we're at the beginning of the list
+                            return@insertSeparators UiModel.SeparatorItem(1)
+                        }
+                        if (before.index % 10 == 0) {
+                            return@insertSeparators UiModel.SeparatorItem((before.index / 10) + 1)
+
+                        } else {
+                            null
+                        }
+                    }
+                }
+                .cachedIn(viewModelScope)
+            _viewState.value = _viewState.value.copy(movieResponse = movieResponse)
         }
     }
 
@@ -61,15 +57,21 @@ class MovieListViewModel @Inject constructor(private var mrepo: MovieRepository)
 
     fun insertMovieDetails(movie: Movie) {
         viewModelScope.launch {
-            val movieDetailsResponse = mrepo.showMovieDetails(movie.id).data!!
-            mrepo.insertMovieDetails(movieDetailsResponse)
+            val movieDetailsResponse = mrepo.showMovieDetails(movie.id).data
+            if (movieDetailsResponse != null) {
+                mrepo.insertMovieDetails(movieDetailsResponse)
+            }
+            //TODO add snackBar functionality in fragment for better ux
         }
     }
 
     fun deleteMovieDetails(movie: Movie) {
         viewModelScope.launch {
-            val movieDetailsResponse = mrepo.showMovieDetails(movie.id).data!!
-            mrepo.deleteMovieDetails(movieDetailsResponse)
+            val movieDetailsResponse = mrepo.showMovieDetails(movie.id).data
+            if (movieDetailsResponse != null) {
+                mrepo.deleteMovieDetails(movieDetailsResponse)
+            }
+            //TODO add snackBar functionality in fragment for better ux
         }
     }
 
