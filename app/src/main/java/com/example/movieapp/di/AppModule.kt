@@ -22,25 +22,25 @@ class AppModule {
 
     @Provides
     @Singleton
-    fun provideMovieRepository(mds: MovieDataSource, movieRoomDatasource: MovieRoomDatasource): MovieRepository{
+    fun provideMovieRepository(mds: MovieDataSource, movieRoomDatasource: MovieRoomDatasource): MovieRepository {
         return MovieRepository(mds, movieRoomDatasource)
     }
 
     @Provides
     @Singleton
-    fun provideMovieDataSource(mdao: MovieDao): MovieDataSource{
-        return MovieDataSource(mdao)
+    fun provideMovieDataSource(mDao: MovieDao): MovieDataSource {
+        return MovieDataSource(mDao)
     }
 
     @Provides
     @Singleton
-    fun provideKisilerDao() : MovieDao {
+    fun provideMoviesDao(): MovieDao {
         return ApiUtils.getMovieDao()
     }
 
     @Provides
     @Singleton
-    fun provideMovieRoomDataSource(movieRoomDao: MovieRoomDao): MovieRoomDatasource{
+    fun provideMovieRoomDataSource(movieRoomDao: MovieRoomDao): MovieRoomDatasource {
         return MovieRoomDatasource(movieRoomDao)
     }
 
@@ -48,7 +48,7 @@ class AppModule {
     @Singleton
     fun injectRoomDatabase(
         @ApplicationContext context: Context
-    ) = Room.databaseBuilder(context, MovieRoomDatabase::class.java,"movies").fallbackToDestructiveMigration()
+    ) = Room.databaseBuilder(context, MovieRoomDatabase::class.java, "movies").fallbackToDestructiveMigration()
         .build()
 
     @Provides

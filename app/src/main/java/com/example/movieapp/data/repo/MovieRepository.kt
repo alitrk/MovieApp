@@ -9,7 +9,7 @@ import com.example.movieapp.data.model.MovieDetailsResponse
 import com.example.movieapp.util.Resource
 import kotlinx.coroutines.flow.Flow
 
-class MovieRepository (var mds: MovieDataSource, var movieRoomDataSource: MovieRoomDatasource){
+class MovieRepository(private var mds: MovieDataSource, private var movieRoomDataSource: MovieRoomDatasource) {
 
     fun searchMovie(title: String): Flow<PagingData<Movie>> = mds.searchMovie(title)
 
@@ -23,13 +23,15 @@ class MovieRepository (var mds: MovieDataSource, var movieRoomDataSource: MovieR
     fun getMovies(): LiveData<List<Movie>> = movieRoomDataSource.observeMovies()
 
     //Room Details
-    suspend fun insertMovieDetails(movieDetailsResponse: MovieDetailsResponse) = movieRoomDataSource.insertMovieDetails(movieDetailsResponse)
+    suspend fun insertMovieDetails(movieDetailsResponse: MovieDetailsResponse) =
+        movieRoomDataSource.insertMovieDetails(movieDetailsResponse)
 
-    suspend fun deleteMovieDetails(movieDetailsResponse: MovieDetailsResponse) = movieRoomDataSource.deleteMovieDetails(movieDetailsResponse)
+    suspend fun deleteMovieDetails(movieDetailsResponse: MovieDetailsResponse) =
+        movieRoomDataSource.deleteMovieDetails(movieDetailsResponse)
 
     suspend fun deleteMovieByID(id: String) = movieRoomDataSource.deleteMovieByID(id)
 
-    suspend fun observeMovieDetails(id: String):MovieDetailsResponse = movieRoomDataSource.observeMovieDetails(id)
+    suspend fun observeMovieDetails(id: String): MovieDetailsResponse = movieRoomDataSource.observeMovieDetails(id)
 
 
 }

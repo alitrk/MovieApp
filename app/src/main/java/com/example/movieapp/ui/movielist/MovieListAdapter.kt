@@ -97,14 +97,24 @@ class MovieListAdapter() : PagingDataAdapter<UiModel, ViewHolder>(UIMODEL_COMPAR
 
                     binding.ibMovieItemFav.setOnClickListener {
                         if (!binding.ibMovieItemFav.isSelected) {
-                            binding.ibMovieItemFav.setImageResource(R.drawable.ic_favorite)
                             listener?.onButtonClickInsert(uiModel.movie)
-                            binding.ibMovieItemFav.isSelected = true
-                            Snackbar.make(
-                                it,
-                                "${uiModel.movie.title} has been added to your favourites",
-                                Snackbar.LENGTH_SHORT
-                            ).show()
+                            val isSuccess = listener?.onButtonClickInsert(uiModel.movie)!!
+                            binding.ibMovieItemFav.isSelected = isSuccess
+                            if (isSuccess) {
+                                binding.ibMovieItemFav.setImageResource(R.drawable.ic_favorite)
+                                Snackbar.make(
+                                    it,
+                                    "${uiModel.movie.title} has been added to your favourites",
+                                    Snackbar.LENGTH_SHORT
+                                ).show()
+                            } else {
+                                Snackbar.make(
+                                    it,
+                                    "Check your internet connection",
+                                    Snackbar.LENGTH_LONG
+                                ).show()
+                            }
+
                         } else {
                             binding.ibMovieItemFav.setImageResource(R.drawable.ic_not_favorite)
                             listener?.onButtonClickDelete(uiModel.movie)
@@ -133,6 +143,6 @@ class MovieListAdapter() : PagingDataAdapter<UiModel, ViewHolder>(UIMODEL_COMPAR
 
 interface ItemClickListener {
     fun onButtonClickDelete(item: Movie)
-    fun onButtonClickInsert(item: Movie)
+    fun onButtonClickInsert(item: Movie): Boolean
 
 }

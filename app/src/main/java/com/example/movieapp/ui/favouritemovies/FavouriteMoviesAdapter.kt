@@ -11,9 +11,8 @@ import com.example.movieapp.databinding.FavouritesListItemBinding
 import com.example.movieapp.util.navigate
 import com.google.android.material.snackbar.Snackbar
 
-
 class FavouriteMoviesAdapter : ListAdapter<Movie, FavouriteMoviesAdapter.FavouritesMoviesViewHolder>(MovieListUtil()) {
-    var listener : ItemClickListenerFavourites?= null
+    var listener: ItemClickListenerFavourites? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): FavouritesMoviesViewHolder {
         val binding = FavouritesListItemBinding.inflate(LayoutInflater.from(parent.context), parent, false)
@@ -25,15 +24,23 @@ class FavouriteMoviesAdapter : ListAdapter<Movie, FavouriteMoviesAdapter.Favouri
         movie?.let { movieItem ->
             val binding = holder._binding
             binding.ibMovieItemFavFavourites.setOnClickListener {
-                val snackBar = Snackbar.make(it,"Are you sure you want to remove the movie from your favourites list?", Snackbar.LENGTH_LONG)
-                    .setAction("Yes"){
+                val snackBar = Snackbar.make(
+                    it,
+                    "Are you sure you want to remove the movie from your favourites list?",
+                    Snackbar.LENGTH_LONG
+                )
+                    .setAction("Yes") {
                         listener?.onButtonClickDelete(movie)
                     }
                 snackBar.show()
             }
             binding.recyclerViewRowFavourite.setOnClickListener {
-                val navigate = FavouriteMoviesFragmentDirections.actionFavouriteMoviesFragmentToMovieDetailsFragment(movie.title, movie.id, true)
-                Navigation.navigate(it,navigate)
+                val navigate = FavouriteMoviesFragmentDirections.actionFavouriteMoviesFragmentToMovieDetailsFragment(
+                    movie.title,
+                    movie.id,
+                    true
+                )
+                Navigation.navigate(it, navigate)
             }
 
 
@@ -41,7 +48,8 @@ class FavouriteMoviesAdapter : ListAdapter<Movie, FavouriteMoviesAdapter.Favouri
         }
     }
 
-    class FavouritesMoviesViewHolder(private val binding: FavouritesListItemBinding) : RecyclerView.ViewHolder(binding.root) {
+    class FavouritesMoviesViewHolder(private val binding: FavouritesListItemBinding) :
+        RecyclerView.ViewHolder(binding.root) {
         val _binding = binding
         fun bind(item: Movie) {
             binding.movieFavourites = item
@@ -61,8 +69,8 @@ class FavouriteMoviesAdapter : ListAdapter<Movie, FavouriteMoviesAdapter.Favouri
         }
     }
 
-    interface ItemClickListenerFavourites{
-        fun onButtonClickDelete(item : Movie)
+    interface ItemClickListenerFavourites {
+        fun onButtonClickDelete(item: Movie)
     }
 
 }

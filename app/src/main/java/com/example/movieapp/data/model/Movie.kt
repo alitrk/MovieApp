@@ -7,20 +7,21 @@ import java.io.Serializable
 
 @Entity(tableName = "movies")
 data class Movie(
-    @SerializedName ("Title")
+    @SerializedName("Title")
     val title: String,
 
-    @SerializedName ("Year")
+    @SerializedName("Year")
     val year: String,
 
     @PrimaryKey
-    @SerializedName ("imdbID")
+    @SerializedName("imdbID")
     val id: String,
 
-    @SerializedName ("Type")
+    @SerializedName("Type")
     val type: String,
 
-    @SerializedName ("Poster")
-    val posterPath: String): Serializable{
+    @SerializedName("Poster")
+    val posterPath: String
+) : Serializable {
 
-    }
+}

@@ -9,46 +9,46 @@ data class MovieDetailsResponse(
     @SerializedName("Actors")
     val actors: String? = "",
 
-    @SerializedName ("BoxOffice")
+    @SerializedName("BoxOffice")
     val boxOffice: String? = "",
 
-    @SerializedName ("Country")
+    @SerializedName("Country")
     val country: String? = "",
 
-    @SerializedName ("Director")
+    @SerializedName("Director")
     val director: String? = "",
 
-    @SerializedName ("Language")
+    @SerializedName("Language")
     val language: String? = "",
 
-    @SerializedName ("Plot")
+    @SerializedName("Plot")
     val plot: String? = "",
 
-    @SerializedName ("Poster")
+    @SerializedName("Poster")
     val poster: String? = "",
 
-    @SerializedName ("Response")
+    @SerializedName("Response")
     val response: String? = "",
 
-    @SerializedName ("Runtime")
+    @SerializedName("Runtime")
     val runtime: String? = "",
 
-    @SerializedName ("Title")
+    @SerializedName("Title")
     val title: String? = "",
 
-    @SerializedName ("Writer")
+    @SerializedName("Writer")
     val writer: String? = "",
 
-    @SerializedName ("Year")
+    @SerializedName("Year")
     val year: String? = "",
 
     @PrimaryKey
-    @SerializedName ("imdbID")
+    @SerializedName("imdbID")
     val id: String,
 
-    @SerializedName ("imdbRating")
+    @SerializedName("imdbRating")
     val rating: String? = "",
 
-    @SerializedName ("Error")
+    @SerializedName("Error")
     val error: String? = ""
 )

@@ -5,7 +5,7 @@ import com.example.movieapp.data.model.Movie
 import com.example.movieapp.data.model.MovieDetailsResponse
 import com.example.movieapp.room.MovieRoomDao
 
-class MovieRoomDatasource(var movieRoomDao: MovieRoomDao) {
+class MovieRoomDatasource(private var movieRoomDao: MovieRoomDao) {
 
     suspend fun insertMovie(movie: Movie) {
         movieRoomDao.insertMovie(movie)
@@ -27,7 +27,7 @@ class MovieRoomDatasource(var movieRoomDao: MovieRoomDao) {
         movieRoomDao.deleteMovieDetails(movieDetailsResponse)
     }
 
-    suspend fun observeMovieDetails(id: String):MovieDetailsResponse {
+    suspend fun observeMovieDetails(id: String): MovieDetailsResponse {
         return movieRoomDao.observeMovieDetails(id)
     }
 

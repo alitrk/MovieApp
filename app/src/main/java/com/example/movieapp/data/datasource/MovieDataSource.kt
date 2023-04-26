@@ -10,7 +10,7 @@ import com.example.movieapp.retrofit.MovieDao
 import com.example.movieapp.util.Resource
 import kotlinx.coroutines.flow.Flow
 
-class MovieDataSource (var mdao: MovieDao){
+class MovieDataSource(private var mdao: MovieDao) {
     fun searchMovie(title: String): Flow<PagingData<Movie>> =
         Pager(
             config = PagingConfig(
@@ -32,12 +32,12 @@ class MovieDataSource (var mdao: MovieDao){
             if (response.isSuccessful) {
                 response.body()?.let {
                     return@let Resource.success(it)
-                } ?: Resource.error("Error",null)
+                } ?: Resource.error("Error", null)
             } else {
-                Resource.error("Error",null)
+                Resource.error("Error", null)
             }
         } catch (e: Exception) {
-            Resource.error("No data!",null)
+            Resource.error("No data!", null)
         }
     }
 

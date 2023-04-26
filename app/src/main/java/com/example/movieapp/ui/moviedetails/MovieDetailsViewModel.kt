@@ -1,6 +1,9 @@
 package com.example.movieapp.ui.moviedetails
 
-import androidx.lifecycle.*
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.movieapp.data.model.MovieDetailsResponse
 import com.example.movieapp.data.repo.MovieRepository
 import com.example.movieapp.util.Resource
@@ -9,24 +12,26 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class MovieDetailsViewModel @Inject constructor(var mrepo: MovieRepository) : ViewModel(){
+class MovieDetailsViewModel @Inject constructor(var mrepo: MovieRepository) : ViewModel() {
 
-    var movieDetailsFromApi = MutableLiveData<Resource<MovieDetailsResponse>>()
+    private val _movieDetailsFromApi = MutableLiveData<Resource<MovieDetailsResponse>>()
+    val movieDetailsFromApi: LiveData<Resource<MovieDetailsResponse>>
+        get() = _movieDetailsFromApi
 
-    var movieDetailsFromRoom = MutableLiveData<MovieDetailsResponse>()
+    private val _movieDetailsFromRoom = MutableLiveData<MovieDetailsResponse>()
+    val movieDetailsFromRoom: LiveData<MovieDetailsResponse>
+        get() = _movieDetailsFromRoom
 
 
-
-    fun showMovieDetailsFromRoom(id:String) {
+    fun showMovieDetailsFromRoom(id: String) {
         viewModelScope.launch {
-            movieDetailsFromRoom.postValue(mrepo.observeMovieDetails(id))
+            _movieDetailsFromRoom.postValue(mrepo.observeMovieDetails(id))
         }
     }
 
-    fun showMovieDetailsFromApi(id:String) {
+    fun showMovieDetailsFromApi(id: String) {
         viewModelScope.launch {
-            val response = mrepo.showMovieDetails(id)
-            movieDetailsFromApi.value = response
+            _movieDetailsFromApi.postValue(mrepo.showMovieDetails(id))
         }
     }
 

@@ -32,10 +32,10 @@ fun downloadImage(view: ImageView, url: String?) {
     view.downloadFromUrl(url, view.context)
 }
 
-fun Navigation.navigate(v: View, id:Int){
+fun Navigation.navigate(v: View, id: Int) {
     findNavController(v).navigate(id)
 }
 
-fun Navigation.navigate(v: View, id: NavDirections){
+fun Navigation.navigate(v: View, id: NavDirections) {
     findNavController(v).navigate(id)
 }

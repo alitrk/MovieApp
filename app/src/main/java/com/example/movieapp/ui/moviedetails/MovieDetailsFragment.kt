@@ -3,9 +3,12 @@ package com.example.movieapp.ui.moviedetails
 import android.os.Bundle
 import android.view.*
 import android.widget.Toast
+import androidx.core.content.ContextCompat
+import androidx.core.view.MenuProvider
 import androidx.databinding.DataBindingUtil
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
 import androidx.navigation.fragment.navArgs
 import com.example.movieapp.R
 import com.example.movieapp.databinding.FragmentMovieDetailsBinding
@@ -40,7 +43,7 @@ class MovieDetailsFragment : Fragment() {
             viewModel.showMovieDetailsFromApi(movieObjectId)
             observeApiData()
         }
-
+        roomMovieObserver()
         return binding.root
     }
 
@@ -75,32 +78,30 @@ class MovieDetailsFragment : Fragment() {
         }
     }
 
-    /*private fun roomMovieObserver() {
-        viewModel.isFavoriteLiveData.observe(viewLifecycleOwner) { isFavourite ->
-            requireActivity().addMenuProvider(object : MenuProvider {
-                override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
-                    menuInflater.inflate(R.menu.favourites_menu, menu)
-                    val item = menu.getItem(0)
-                    if (isFavourite) {
-                        item?.icon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_favorite)
-                    } else {
-                        item?.icon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_not_favorite)
-                    }
+    private fun roomMovieObserver() {
+        requireActivity().addMenuProvider(object : MenuProvider {
+            override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+                menuInflater.inflate(R.menu.favourites_menu, menu)
+                val item = menu.getItem(0)
+                if (isFavourite) {
+                    item?.icon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_favorite)
+                } else {
+                    item?.icon = ContextCompat.getDrawable(requireContext(), R.drawable.ic_not_favorite)
                 }
+            }
 
-                override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
-                    return when (menuItem.itemId) {
-                        R.id.favourites_icon -> {
-                            true
-                        }
-
-                        else -> false
+            override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+                return when (menuItem.itemId) {
+                    R.id.favourites_icon -> {
+                        true
                     }
-                }
-            }, viewLifecycleOwner, Lifecycle.State.RESUMED)
-        }
 
-    }*/
+                    else -> false
+                }
+            }
+        }, viewLifecycleOwner, Lifecycle.State.RESUMED)
+
+    }
 
     override fun onDestroyView() {
         super.onDestroyView()

@@ -1,5 +1,7 @@
 package com.example.movieapp.ui.movielist
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import androidx.paging.PagingData
@@ -7,7 +9,9 @@ import androidx.paging.cachedIn
 import androidx.paging.insertSeparators
 import androidx.paging.map
 import com.example.movieapp.data.model.Movie
+import com.example.movieapp.data.model.MovieDetailsResponse
 import com.example.movieapp.data.repo.MovieRepository
+import com.example.movieapp.util.Resource
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
@@ -18,6 +22,11 @@ class MovieListViewModel @Inject constructor(private var mrepo: MovieRepository)
 
     private val _viewState = MutableStateFlow(MovieListViewState())
     val viewState: StateFlow<MovieListViewState> = _viewState.asStateFlow()
+
+    private val _movieDetailsFromApi = MutableLiveData<Resource<MovieDetailsResponse>>()
+    val movieDetailsFromApi: LiveData<Resource<MovieDetailsResponse>>
+        get() = _movieDetailsFromApi
+
     var index = 1
     val roomMovieList = mrepo.getMovies()
     fun fetchPopularMovies(title: String) {
@@ -61,7 +70,12 @@ class MovieListViewModel @Inject constructor(private var mrepo: MovieRepository)
             if (movieDetailsResponse != null) {
                 mrepo.insertMovieDetails(movieDetailsResponse)
             }
-            //TODO add snackBar functionality in fragment for better ux
+        }
+    }
+
+    fun showMovieDetailsFromApi(id: String) {
+        viewModelScope.launch {
+            _movieDetailsFromApi.postValue(mrepo.showMovieDetails(id))
         }
     }
 
@@ -71,7 +85,6 @@ class MovieListViewModel @Inject constructor(private var mrepo: MovieRepository)
             if (movieDetailsResponse != null) {
                 mrepo.deleteMovieDetails(movieDetailsResponse)
             }
-            //TODO add snackBar functionality in fragment for better ux
         }
     }
 

@@ -5,7 +5,7 @@ import androidx.paging.PagingState
 import com.example.movieapp.data.model.Movie
 import com.example.movieapp.retrofit.MovieDao
 
-class MoviePagingDataSource (private val movieDao: MovieDao, private val title: String) :
+class MoviePagingDataSource(private val movieDao: MovieDao, private val title: String) :
     PagingSource<Int, Movie>() {
 
     override suspend fun load(params: LoadParams<Int>): LoadResult<Int, Movie> {
@@ -13,7 +13,7 @@ class MoviePagingDataSource (private val movieDao: MovieDao, private val title: 
         return try {
             val response = movieDao.searchMovie(title, page)
             val movie = response.movieList
-            if(response.response == "False"){
+            if (response.response == "False") {
                 throw java.lang.Exception(response.error)
             }
             LoadResult.Page(
