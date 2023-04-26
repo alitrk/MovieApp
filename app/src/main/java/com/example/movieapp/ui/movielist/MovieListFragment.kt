@@ -1,6 +1,7 @@
 package com.example.movieapp.ui.movielist
 
 import android.content.Context
+import android.net.ConnectivityManager
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -18,7 +19,6 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.movieapp.R
 import com.example.movieapp.data.model.Movie
 import com.example.movieapp.databinding.FragmentMovieListBinding
-import com.example.movieapp.util.Status
 import com.example.movieapp.util.navigate
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collectLatest
@@ -147,33 +147,13 @@ class MovieListFragment : Fragment(), ItemClickListener {
         }
     }
 
-    private fun observeApiData(): Boolean {
-        var isSuccess = false
-        viewModel.movieDetailsFromApi.observe(viewLifecycleOwner) {
-            when (it.status) {
-                Status.SUCCESS -> {
-                    isSuccess = true
-                }
-
-                Status.ERROR -> {
-                    isSuccess = false
-                }
-
-                Status.LOADING -> {
-                }
-            }
-        }
-        return isSuccess
-    }
-
     override fun onButtonClickDelete(item: Movie) {
         viewModel.deleteMovie(item)
         viewModel.deleteMovieDetails(item)
     }
 
     override fun onButtonClickInsert(item: Movie): Boolean {
-        viewModel.showMovieDetailsFromApi(item.id)
-        return if (observeApiData()) {
+        return if (isInternetAvailable(requireContext())) {
             viewModel.insertMovie(item)
             viewModel.insertMovieDetails(item)
             true
@@ -181,6 +161,13 @@ class MovieListFragment : Fragment(), ItemClickListener {
             false
         }
     }
+
+    private fun isInternetAvailable(context: Context): Boolean {
+        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+        val networkInfo = connectivityManager.activeNetworkInfo
+        return networkInfo != null && networkInfo.isConnected
+    }
+
 
     fun fabOnClick(view: View) {
         Navigation.navigate(view, R.id.action_navigation_movie_list_to_favouriteMoviesFragment)

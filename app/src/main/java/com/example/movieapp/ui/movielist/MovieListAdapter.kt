@@ -97,7 +97,6 @@ class MovieListAdapter() : PagingDataAdapter<UiModel, ViewHolder>(UIMODEL_COMPAR
 
                     binding.ibMovieItemFav.setOnClickListener {
                         if (!binding.ibMovieItemFav.isSelected) {
-                            listener?.onButtonClickInsert(uiModel.movie)
                             val isSuccess = listener?.onButtonClickInsert(uiModel.movie)!!
                             binding.ibMovieItemFav.isSelected = isSuccess
                             if (isSuccess) {
