@@ -43,7 +43,7 @@ To install the Movies App, follow these steps:
 2. Open the project in Android Studio.
 3. Build and run the app on an emulator or physical device.
 
-## Credits
+## Technologies
 
 The Movies App was developed by Ali Türk and was built using the following technologies:
 
