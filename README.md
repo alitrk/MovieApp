@@ -32,7 +32,8 @@ To use the Movies App, follow these steps:
 
 ## Demonstration
 
-https://user-images.githubusercontent.com/55719203/235309138-41487e5b-6ec2-4c8b-a0cb-45696bec58a1.mp4
+https://user-images.githubusercontent.com/55719203/235309981-ca3c1bd7-4dbc-4689-97b8-3bf30599f52b.mp4
+
 
 ## Installation
 
